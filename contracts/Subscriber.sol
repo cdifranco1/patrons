@@ -15,19 +15,21 @@ Work on creator flow:
 */
 
 
-contract OwnedToken is ERC20 {
+contract RewardToken is ERC20 {
   mapping(address => uint) public cumulativePayments;
 
   constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {
+    // mint initial supply of 1 token
+    _mint(msg.sender, 1);
   }
 
   function mint(address receiver, uint amount) internal {
-    // mint initial supply of 1 token
     _mint(receiver, amount);
   }
 
-  function calcMintAmount(address depositor) internal pure returns (uint) {
-    
+  function calcMintAmount(address depositor) internal returns (uint) {
+    uint payments = cumulativePayments[depositor];
+
   }
 
   function deposit() public payable {
@@ -38,7 +40,7 @@ contract OwnedToken is ERC20 {
 }
 
 contract TokenManager {
-  mapping (address => OwnedToken) private creatorOwnedTokens;
+  mapping (address => RewardToken) private creatorOwnedTokens;
 
   function _createToken(string memory _name, string memory _symbol) private returns(OwnedToken newToken) {
     return new OwnedToken(_name, _symbol);
@@ -54,19 +56,13 @@ contract TokenManager {
   }
 }
 
-enum PaymentFrequency { Monthly, Biweekly, Weekly }
-
-struct Subscription {
-  address creator;
-  uint256 amount;
-  PaymentFrequency frequency;
+struct Asset {
+ uint underlyingEthAmt;
+ uint cEthAmt;
 }
 
-struct Payment {
-  address to;
-  address from;
-  uint timestamp;
-  uint amount;
+contract SubscriberPool {
+  mapping (address => Asset)
 }
 
 contract Subscriber {
