@@ -27,23 +27,23 @@ contract RewardToken is ERC20 {
     _mint(receiver, amount);
   }
 
-  function calcMintAmount(address depositor) internal returns (uint) {
-    uint payments = cumulativePayments[depositor];
+  // function calcMintAmount(address depositor) internal returns (uint) {
+  //   uint payments = cumulativePayments[depositor];
 
-  }
+  // }
 
-  function deposit() public payable {
-    cumulativePayments[msg.sender] += msg.value;
-    mint(msg.sender, calcMintAmount(msg.sender));
-  }
+  // function deposit() public payable {
+  //   cumulativePayments[msg.sender] += msg.value;
+  //   mint(msg.sender, calcMintAmount(msg.sender));
+  // }
 
 }
 
 contract TokenManager {
   mapping (address => RewardToken) private creatorOwnedTokens;
 
-  function _createToken(string memory _name, string memory _symbol) private returns(OwnedToken newToken) {
-    return new OwnedToken(_name, _symbol);
+  function _createToken(string memory _name, string memory _symbol) private returns(RewardToken newToken) {
+    return new RewardToken(_name, _symbol);
   }
 
   function createToken(address minter, string calldata tokenName, string calldata tokenSymbol) external {
@@ -51,31 +51,30 @@ contract TokenManager {
     creatorOwnedTokens[minter] = _createToken(tokenName, tokenSymbol);
   }
 
-  function getCreatorTokenContract(address _minter) public view returns(OwnedToken newToken) {
+  function getCreatorTokenContract(address _minter) public view returns(RewardToken newToken) {
     return creatorOwnedTokens[_minter];
   }
 }
 
-struct Asset {
- uint underlyingEthAmt;
- uint cEthAmt;
-}
+// struct Asset {
+//  uint underlyingEthAmt;
+//  uint cEthAmt;
+// }
 
-contract SubscriberPool {
-  mapping (address => Asset)
-}
+// contract Subscriber {
+//   mapping (address => Subscription[]) private userSubscriptions;
+//   TokenManager public tokenManager;
 
-contract Subscriber {
-  mapping (address => Subscription[]) private userSubscriptions;
-  TokenManager public tokenManager;
-
-  function subscribeToCreator(address subscriber, address creator, uint amount, PaymentFrequency frequency) public {
-    require(userSubscriptions[subscriber].length == 0, "Already subscribed");
-    userSubscriptions[subscriber].push(Subscription(creator, amount, frequency));
-  }
-
+//   function subscribeToCreator(address subscriber, address creator, uint amount, PaymentFrequency frequency) public {
+//     require(userSubscriptions[subscriber].length == 0, "Already subscribed");
+//     userSubscriptions[subscriber].push(Subscription(creator, amount, frequency));
+//   }
   
+// }
 
-  
-}
+// contract StakingPool {
+//   RewardToken rewardToken;
+//   mapping(address => uint) stakerBalances;
+
+// }
 
